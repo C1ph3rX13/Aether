@@ -28,12 +28,12 @@
 
 ## 功能
 
-- **Worker 运行环境：**支持 Claude Code、Codex 和 Pi，分别配置模型提供方和凭据。
-- **执行历史：**通过 SQLite 持久化项目状态和执行记录。
-- **运行设置：**可配置并发、任务超时、重试策略、提示词组和项目容器。
-- **人工控制：**支持暂停、恢复、基于证据完成、重新打开、历史回放和项目快照导出。
-- **配置版本：**新项目使用已保存的设置，已有项目保留其绑定的配置版本。
-- **原生部署：**Next.js 界面嵌入 Go 二进制，Server 与 Dispatcher 可合并或分离运行。
+- **Worker 运行环境**：支持 Claude Code、Codex 和 Pi，分别配置模型提供方和凭据。
+- **执行历史**：通过 SQLite 持久化项目状态和执行记录。
+- **运行设置**：可配置并发、任务超时、重试策略、提示词组和项目容器。
+- **人工控制**：支持暂停、恢复、基于证据完成、重新打开、历史回放和项目快照导出。
+- **配置版本**：新项目使用已保存的设置，已有项目保留其绑定的配置版本。
+- **原生部署**：Next.js 界面嵌入 Go 二进制，Server 与 Dispatcher 可合并或分离运行。
 
 ## 快速开始
 
@@ -57,7 +57,7 @@ aether run --deployment "$PWD/configs/bootstrap-deployment.toml"
 ```
 
 > [!TIP]
-> **推荐使用 `aether run` 启动。**该命令会在同一进程中启动 Server 和 Dispatcher。
+> **推荐使用 `aether run` 启动**。该命令会在同一进程中启动 Server 和 Dispatcher。
 
 打开 [http://127.0.0.1:8000](http://127.0.0.1:8000)，[配置首个 Worker](INSTALL_CN.md#配置首个-worker)，然后通过 **Projects → New Project** 创建项目。
 
@@ -67,7 +67,7 @@ aether run --deployment "$PWD/configs/bootstrap-deployment.toml"
 
 | 命令 | 职责 |
 | --- | --- |
-| `aether run -d deployment.toml` | **推荐方式。**在同一进程中启动 Server 和 Dispatcher。 |
+| `aether run -d deployment.toml` | **推荐方式**。在同一进程中启动 Server 和 Dispatcher。 |
 | `aether serve -d deployment.toml` | 浏览器界面、HTTP API 和 SQLite，不访问 Docker。 |
 | `aether dispatch -d deployment.toml` | 调度与 Docker Worker 执行，通过 HTTP 连接 Server。 |
 

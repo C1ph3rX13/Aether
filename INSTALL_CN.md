@@ -9,7 +9,7 @@
 </p>
 
 > [!TIP]
-> **推荐使用 `aether run` 启动。**该命令会同时启动 Server 和 Dispatcher。本指南面向 Linux；两个角色需要不同主机或权限时，可参考[分离部署](#分离-server-与-dispatcher)。
+> **推荐使用 `aether run` 启动**。该命令会同时启动 Server 和 Dispatcher。本指南面向 Linux；两个角色需要不同主机或权限时，可参考[分离部署](#分离-server-与-dispatcher)。
 
 ## 目录
 
