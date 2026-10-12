@@ -1,0 +1,65 @@
+# Aether Bootstrap Deployment Manifest
+#
+# The native `serve`, `dispatch`, and trusted `run` commands all require one
+# explicit `aether.bootstrap/v1` TOML manifest:
+#
+#   aether serve -d configs/bootstrap-deployment.toml
+#   aether dispatch --deployment configs/bootstrap-deployment.toml
+#   aether run -d configs/bootstrap-deployment.toml
+#
+# This file contains deployment-owned startup parameters only. It is not
+# editable from the Configuration Editor. Do not put Worker, Provider, API
+# Key, task timeout, concurrency, retry, container image, or Prompt Group
+# settings here. Those belong to the versioned Dynamic Deployment
+# Configuration managed by the backend Configuration API.
+#
+# Bootstrap Manifest paths may be absolute or relative to the process working
+# directory. server.database_path must be an absolute SQLite path, and Unix
+# Docker endpoints must contain an absolute socket path. Environment expansion,
+# ~, default-path discovery, legacy flags, and YAML configuration are rejected
+# or ignored as startup inputs.
+#
+# The Server uses only deployment.id, operator.name, and the server fields. It
+# never opens Docker. The independent Dispatcher uses deployment.id,
+# dispatcher.control_plane_url, and dispatcher.docker_host; it does not open
+# SQLite. Trusted run combines both roles in one process.
+#
+# Values below are safe examples. Provider API Keys are configured per Worker
+# through the Configuration Editor and are intentionally absent from this
+# file.
+
+schema = "aether.bootstrap/v1"
+
+[deployment]
+# Stable identity shared by the Server and Dispatcher of one Aether deployment.
+# Different deployments connected to the same Docker daemon must use different IDs.
+id = "aether-local"
+
+[operator]
+# Server-side identity used for human business commands.
+# The browser cannot replace or override this identity.
+name = "local-operator"
+
+[server]
+# Control Plane and production frontend listen address.
+listen_host = "127.0.0.1"
+listen_port = 8000
+
+# SQLite path owned by the Server process. Use an absolute path in production.
+database_path = "/var/lib/aether/aether.db"
+
+[dispatcher]
+# Base URL of the Server Control Plane API, including /api/v1.
+# In a separated deployment this may point to another host.
+control_plane_url = "http://127.0.0.1:8000/api/v1"
+
+# Docker daemon endpoint used only by Dispatcher and trusted local run.
+# Aether does not read DOCKER_HOST or automatically select another daemon.
+docker_host = "unix:///var/run/docker.sock"
+
+# The following values are deliberately not bootstrap settings:
+# - dispatcher lease TTL and renewal policy: Control Plane coordination defaults
+# - scheduler interval, worker limits, task deadlines, retries: Dynamic Config
+# - Worker image, network mode, capabilities, output limits: Dynamic Config
+# - Worker Agent Type, Provider, model, endpoint, API Key, custom env: Dynamic Config
+# - Prompt Group: bundled application resource selected by Dynamic Config

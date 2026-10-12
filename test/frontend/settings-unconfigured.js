@@ -1,0 +1,33 @@
+async page => {
+  const origin = new URL(page.url()).origin
+  const assert = (condition, message) => { if (!condition) throw new Error(message) }
+  await page.getByText('Project creation unavailable', { exact: true }).waitFor()
+  assert(await page.getByRole('button', { name: 'New Project', exact: true }).isDisabled(), 'Missing applied configuration blocks creation')
+  await page.getByRole('link', { name: 'Open Workers', exact: true }).click()
+  await page.waitForURL('**/workers/codex')
+  await page.getByRole('link', { name: 'Runtime', exact: true }).click()
+  await page.getByRole('tab', { name: 'Capacity', exact: true }).click()
+  await page.waitForURL('**/settings/runtime-capacity')
+  assert(new URL(page.url()).pathname === '/settings/runtime-capacity', 'Blocked creation opens the implemented Settings page')
+  await page.getByText('Project creation unavailable', { exact: true }).waitFor()
+  await page.getByLabel('Scheduler interval (seconds)', { exact: true }).waitFor()
+  assert(await page.getByRole('button', { name: 'New Project', exact: true }).isDisabled(), 'Global creation stays unavailable from unconfigured Settings')
+  assert(await page.getByRole('link', { name: 'Runtime', exact: true }).getAttribute('aria-current') === 'page', 'Unconfigured deployment exposes Runtime settings')
+  assert(await page.getByRole('button', { name: 'Apply', exact: true }).count() === 0, 'No separate Apply action')
+  await page.getByRole('button', { name: 'Saved settings', exact: true }).click()
+  const panel = page.getByRole('dialog', { name: 'Saved settings', exact: true })
+  await panel.getByText('No saved settings yet. Save configuration to make it effective.', { exact: true }).waitFor()
+  await panel.getByRole('button', { name: 'Close', exact: true }).click()
+  await page.getByRole('link', { name: 'Tasks', exact: true }).click()
+  await page.getByLabel('Reason primary (seconds)', { exact: true }).waitFor()
+  await page.getByRole('button', { name: 'Use recommended values', exact: true }).click()
+  const response = await page.request.get(`${origin}/api/v1/configuration`)
+  assert(response.ok(), 'Configuration recommendations are readable')
+  const read = await response.json()
+  assert(await page.getByLabel('Reason primary (seconds)', { exact: true }).inputValue() === String(read.recommended_draft.tasks.reason.primary_seconds), 'Recommendations come from the backend')
+  await page.getByLabel('Reason primary (seconds)', { exact: true }).fill(String(read.recommended_draft.tasks.reason.primary_seconds + 1))
+  await page.getByRole('link', { name: 'Projects', exact: true }).click()
+  await page.getByRole('dialog', { name: 'Unsaved settings', exact: true }).getByRole('button', { name: 'Discard', exact: true }).click()
+  await page.getByText('No Projects yet', { exact: true }).waitFor()
+  return { unconfiguredSettings: 'passed', absentInspection: 'passed', backendRecommendations: 'passed' }
+}

@@ -1,0 +1,57 @@
+# Dependencies and caches
+node_modules/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.next/
+.turbo/
+*.tsbuildinfo
+
+# Generated output
+/dist/
+/build/
+/aether
+/web/out/
+/web/next-env.d.ts
+coverage/
+playwright-report/
+test-results/
+*.test
+*.log
+
+# Local configuration and runtime data
+.env*
+/data/
+/backups/
+/configs/bootstrap-deployment.toml
+
+# Local tools
+/.agents/
+/.codex/
+/.aws/
+/.claude/
+/.impeccable/
+/.playwright/
+/.playwright-cli/
+/.superpowers/
+.vercel/
+
+# Excluded release content
+/extras/
+/docs/
+/scripts/
+/.github/
+AGENTS.md
+CLAUDE.md
+/CONTEXT.md
+/DESIGN.md
+/PRODUCT.md
+
+# Editor and OS files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
